@@ -40,31 +40,33 @@ public class Image {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
+                
+                //Dibuja la imagen original
                 g.drawImage(img, 0, 0, null);
 
                 WritableRaster raster = img.getRaster();
                 Raster image = img.getData();
                 
-                for (int i = 0; i < img.getWidth(); i++) {
-                    for (int j = 0; j < img.getHeight(); j++) {
+                //El bucle cambia los colores de la imagen, calculando la media
+                for (int width = 0; width < img.getWidth(); width++) {
+                    for (int height = 0; height < img.getHeight(); height++) {
 
-                        int[] pixel = image.getPixel(i, j, new int[3]);
+                        int[] pixel = image.getPixel(width, height, new int[3]);
 
                         int gray = (pixel[0] + pixel[1] + pixel[2]) / 3;
 
-                        int[] colors = {gray, gray, gray};
+                        int[] colors = {gray , gray, gray};
 
-                        raster.setPixel(i, j, colors);
+                        raster.setPixel(width, height, colors);
                     }
                 }
 
+                //Dibuja la imagen en blanco y negro
                 g.drawImage(img, img.getWidth(), 0, null);
             }
         };
 
         frame.add(pane);
-
-//        System.out.println("R: " + pixel[0] + " G: " + pixel[1] + " B: " + pixel[2]);
     }
 
 }
