@@ -27,13 +27,13 @@ public class Image {
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
+        
         BufferedImage img = ImageIO.read(new File("src\\images\\mhw.jpg"));
-//        BufferedImage img2 = ImageIO.read(new File("src\\images\\mhw.jpg"));
 
         JFrame frame = new JFrame();
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1500, 1000);
+        frame.setSize(img.getWidth() * 2, img.getHeight());
         frame.setVisible(true);
 
         JPanel pane = new JPanel() {
@@ -45,8 +45,8 @@ public class Image {
                 WritableRaster raster = img.getRaster();
                 Raster image = img.getData();
                 
-                for (int i = 0; i < 750; i++) {
-                    for (int j = 0; j < 1000; j++) {
+                for (int i = 0; i < img.getWidth(); i++) {
+                    for (int j = 0; j < img.getHeight(); j++) {
 
                         int[] pixel = image.getPixel(i, j, new int[3]);
 
@@ -58,7 +58,7 @@ public class Image {
                     }
                 }
 
-                g.drawImage(img, 750, 0, null);
+                g.drawImage(img, img.getWidth(), 0, null);
             }
         };
 
