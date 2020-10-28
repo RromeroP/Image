@@ -7,7 +7,10 @@ package image;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBuffer;
+import java.awt.image.DataBufferByte;
 import java.awt.image.Raster;
+import java.awt.image.SampleModel;
 import java.awt.image.WritableRaster;
 import java.io.File;
 import java.io.IOException;
@@ -27,9 +30,10 @@ public class Image {
      */
     public static void main(String[] args) throws IOException {
         // TODO code application logic here
-        
-        BufferedImage img = ImageIO.read(new File("src\\images\\mhw.jpg"));
 
+        BufferedImage img_old = ImageIO.read(new File("src\\images\\mhw.jpg"));
+        BufferedImage img = ImageIO.read(new File("src\\images\\mhw.jpg"));
+        
         JFrame frame = new JFrame();
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,27 +44,43 @@ public class Image {
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
-                
-                //Dibuja la imagen original
-                g.drawImage(img, 0, 0, null);
 
+                //Dibuja la imagen original
+                g.drawImage(img_old, 0, 0, null);
+                
+                byte[] pixels = ((DataBufferByte) img.getRaster().getDataBuffer()).getData();
+                
                 WritableRaster raster = img.getRaster();
-                Raster image = img.getData();
                 
                 //El bucle cambia los colores de la imagen, calculando la media
                 for (int width = 0; width < img.getWidth(); width++) {
                     for (int height = 0; height < img.getHeight(); height++) {
 
-                        int[] pixel = image.getPixel(width, height, new int[3]);
+                        int B = pixels[3 * (width + height * img.getWidth())] & 0xff;
+                        int G = pixels[1 + 3 * (width + height * img.getWidth())] & 0xff;
+                        int R = pixels[2 + 3 * (width + height * img.getWidth())] & 0xff;
 
-                        int gray = (pixel[0] + pixel[1] + pixel[2]) / 3;
-
+                        int gray = (B + G + R) / 3;
+                        
                         int[] colors = {gray , gray, gray};
-
+                        
                         raster.setPixel(width, height, colors);
                     }
                 }
 
+//                for (int width = 0; width < img.getWidth(); width++) {
+//                    for (int height = 0; height < img.getHeight(); height++) {
+//
+//                        int[] pixel = image.getPixel(width, height, new int[3]);
+//
+//                        int gray = (pixel[0] + pixel[1] + pixel[2]) / 3;
+//
+//                        int[] colors = {gray , gray, gray};
+//
+//                        raster.setPixel(width, height, colors);
+//                    }
+//                }
+//
                 //Dibuja la imagen en blanco y negro
                 g.drawImage(img, img.getWidth(), 0, null);
             }
