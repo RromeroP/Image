@@ -52,9 +52,11 @@ public class Image {
                 for (int width = 0; width < img.getWidth(); width++) {
                     for (int height = 0; height < img.getHeight(); height++) {
 
-                        int B = pixels[3 * (width + height * img.getWidth())] & 0xff;
-                        int G = pixels[1 + 3 * (width + height * img.getWidth())] & 0xff;
-                        int R = pixels[2 + 3 * (width + height * img.getWidth())] & 0xff;
+                        int position = (width + height * img.getWidth());
+                        
+                        int B = pixels[3 * position] & 0xff;
+                        int G = pixels[1 + 3 * position] & 0xff;
+                        int R = pixels[2 + 3 * position] & 0xff;
 
                         byte gray = (byte) ((B + G + R) / 3);
 
